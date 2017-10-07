@@ -477,4 +477,28 @@ class MomentTest extends \PHPUnit_Framework_TestCase
 //            ->endOf('month')
 //            ->format();
 //    }
+
+    /**
+     * @dataProvider momentsByWeekdaysProvider
+     */
+    public function testGetMomentsByWeekdays($startDate, array $weekdayNumbers, $forUpcomingWeeks, array $expectedDates)
+    {
+        $moment = new Moment($startDate . 'T00:00:00Z');
+        $weekdays = $moment->getMomentsByWeekdays($weekdayNumbers, $forUpcomingWeeks);
+        $this->assertCount(count($expectedDates), $weekdays);
+        foreach ($expectedDates as $i => $expectedDate)
+        {
+            $this->assertSame($expectedDate, $weekdays[$i]->format('Y-m-d'));
+        }
+    }
+
+    public function momentsByWeekdaysProvider()
+    {
+        return array(
+            array('2017-01-01', array(), 1, array()),
+            array('2017-01-01', array(1), 0, array()),
+            array('2017-11-01', array(1, 4), 2, array('2017-11-02', '2017-11-06', '2017-11-09')),
+            array('2017-10-01', array(2), 2, array('2017-10-03', '2017-10-10'))
+        );
+    }
 }

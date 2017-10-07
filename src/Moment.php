@@ -1046,28 +1046,34 @@ class Moment extends \DateTime
     {
         /** @var Moment[] $moments */
         $dates = array();
+        if (empty($weekdayNumbers) || $forUpcomingWeeks < 1)
+        {
+            return $dates;
+        }
 
-        // get today's week day number
-        $todayWeekday = $this->getWeekday();
+        $startWeekday = $this->getWeekday();
 
         // generate for upcoming weeks
-        for ($w = 1; $w <= $forUpcomingWeeks; $w++)
+        $w = 1;
+        while (count($dates) < $forUpcomingWeeks)
         {
             for ($d = 1; $d <= 7; $d++)
             {
-                if (in_array($d, $weekdayNumbers) && ($w > 1 || $d > $todayWeekday))
+                if (in_array($d, $weekdayNumbers) && ($w > 1 || $d > $startWeekday))
                 {
                     // calculate add days from today's perspective
-                    $addDays = $w === 1 ? $d - $todayWeekday : ($d - $todayWeekday) + ($w * 7 - 7);
+                    $addDays = $w === 1 ? $d - $startWeekday : ($d - $startWeekday) + ($w * 7 - 7);
 
                     // set date
                     $dates[] = $this->cloning()->addDays($addDays);
                 }
             }
+            $w++;
         }
 
         return $dates;
     }
+
 
     /**
      * Returns copy of Moment normalized to UTC timezone
