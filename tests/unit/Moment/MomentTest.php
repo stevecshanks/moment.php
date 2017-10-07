@@ -497,6 +497,7 @@ class MomentTest extends \PHPUnit_Framework_TestCase
         return array(
             array('2017-01-01', array(), 1, array()),
             array('2017-01-01', array(1), 0, array()),
+            array('2017-10-09', array(2, 3), 2, array('2017-10-10', '2017-10-11', '2017-10-17', '2017-10-18')),
             array('2017-11-01', array(1, 4), 2, array('2017-11-02', '2017-11-06', '2017-11-09')),
             array('2017-10-01', array(2), 2, array('2017-10-03', '2017-10-10'))
         );
